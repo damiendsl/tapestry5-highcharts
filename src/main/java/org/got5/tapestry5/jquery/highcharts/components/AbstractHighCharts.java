@@ -9,6 +9,7 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.got5.tapestry5.jquery.highcharts.services.HighChartsCsvExportStack;
 import org.got5.tapestry5.jquery.highcharts.services.HighChartsExportStack;
 import org.got5.tapestry5.jquery.highcharts.services.HighChartsJqueryStack;
 import org.got5.tapestry5.jquery.utils.JQueryUtils;
@@ -37,6 +38,9 @@ public class AbstractHighCharts implements ClientElement{
 	@Parameter(value="false")
 	private boolean needExport;
 	
+	@Parameter(value="false")
+	private boolean needCsvExport;
+	
 	@Inject
 	private JavaScriptSupport javascript;
 	
@@ -48,6 +52,9 @@ public class AbstractHighCharts implements ClientElement{
 		
 		String stackId= (needExport? HighChartsExportStack.STACK_ID: HighChartsJqueryStack.STACK_ID);		
 		this.javascript.importStack(stackId);
+		if(needCsvExport){
+			this.javascript.importStack(HighChartsCsvExportStack.STACK_ID);
+		}
 		
 	}
 	

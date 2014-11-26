@@ -20,6 +20,9 @@ public class HighchartsModule {
 		configuration.addInstance(
 				HighChartsExportStack.STACK_ID,
 				HighChartsExportStack.class);
+		configuration.addInstance(
+				HighChartsCsvExportStack.STACK_ID,
+				HighChartsCsvExportStack.class);
 	}
 
 	public static void contributeComponentClassResolver(

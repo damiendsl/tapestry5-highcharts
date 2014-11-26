@@ -1,0 +1,64 @@
+<html t:type="layout" t:title="Tapestry5 highcharts" t:activeElement="0"  
+		xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+		
+		This pages illustrates the integration of <a href="http://www.highcharts.com/plugin-registry/single/7/Export-CSV">Export-CSV feature</a> in a java method and  in javascript.
+		<br/>
+		<input type="button" id="mybutton1"  value="javascript popup with csv data of chart 1"/>
+		<input type="button" id="mybutton1XlsClientSide"  value="csv data of chart 1 exported in full javascript"/>
+		<input type="button" id="mybutton1XlsServerSide"  value="csv data of chart 1 exported  via a java method"/>
+		
+		<div 
+			t:type="BarChart" 
+			t:id="id1"
+			t:clientId="myBarChart" 
+			t:title="Monthly Average Rainfall"
+			t:subTitle="Source: WorldClimate.com"
+			t:yAxisTitle="Rainfall (mm)"
+			t:categories="categories"
+			t:series="series"
+			t:needCsvExport="literal:true"
+		/>
+		<input type="button" id="mybutton2" value="javascript popup with csv data of chart 2"/>
+		<div 
+			t:type="BarChart" 
+			t:id="id2"
+			t:clientId="myBarChart2" 
+			t:title="Monthly Average Rainfall 2"
+			t:subTitle="Source: WorldClimate.com"
+			t:yAxisTitle="Rainfall 2 (mm)"
+			t:categories="categories"
+			t:series="series2"
+			t:needCsvExport="literal:true"
+		/>
+		<input type="hidden" name="UrlPathForJavaExportlink" id="UrlPathForJavaExportlink" value="${UrlPathForJavaExportlink}"/>
+	
+		
+		<t:actionlink t:id="javaExportlink" />
+		<script>		
+			$('#mybutton1').click(function () {
+				alert(globalHighchartsMap['id1'].getCSV());
+			});
+			$('#mybutton2').click(function () {
+				alert(globalHighchartsMap['id2'].getCSV());
+			});
+			$('#mybutton1XlsClientSide').click(function () {
+				a = document.createElement('a');
+			    a.href        = 'data:attachment/csv,' + globalHighchartsMap['id1'].getCSV().replace(/\n/g, '%0A');
+			    a.target      = '_blank';
+			    a.download    = (this.title ? this.title.textStr.replace(/ /g, '-').toLowerCase() : 'chart') + '.csv';
+			    document.body.appendChild(a);
+			    a.click();
+			    a.remove();
+			});
+			$('#mybutton1XlsServerSide').click(function () {
+				var urlExport = document.getElementById('UrlPathForJavaExportlink').value;
+				$.post(urlExport, {
+			        csv: globalHighchartsMap['id1'].getCSV(),
+			        title: 'Mon titre'
+			    }) .done(function( data ) {
+			    	window.location.href=urlExport;
+			    });
+			});
+		</script>
+
+</html>
